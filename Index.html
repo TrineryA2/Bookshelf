@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BookShelf</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOP NAV BAR -->
+  <nav class="topbar">
+    <div class="logo">
+      <span class="logo-text">BookShelf</span>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-page="home">Home</button>
+      <button class="nav-tab" data-page="manage">My Books</button>
+    </div>
+    <button class="add-btn" id="openAddModal">+ Add Book</button>
+  </nav>
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="page active">
+    <div class="shelf-scroll-container" id="shelfContainer">
+      <!-- Shelves rendered by JS -->
+    </div>
+  </div>
+
+  <!-- MANAGE PAGE -->
+  <div id="page-manage" class="page">
+    <div class="manage-header">
+      <h2 class="manage-title">My Library</h2>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="not_started">Not Started</button>
+        <button class="filter-btn" data-filter="reading">Reading</button>
+        <button class="filter-btn" data-filter="complete">Complete</button>
+      </div>
+    </div>
+    <div class="manage-list" id="manageList">
+      <!-- Book cards rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ADD BOOK MODAL -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add a Book</h3>
+        <button class="modal-close" id="closeAddModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" id="bookTitle" placeholder="Enter book title" />
+        </div>
+        <div class="form-group">
+          <label>Author</label>
+          <input type="text" id="bookAuthor" placeholder="Author name" />
+        </div>
+        <div class="form-group">
+          <label>Cover Image</label>
+          <div class="cover-image-upload" id="coverImageUpload">
+            <input type="file" id="coverImageInput" accept="image/*" style="display:none" />
+            <div class="cover-upload-preview" id="coverUploadPreview">
+              <span class="cover-upload-icon">🖼️</span>
+              <span class="cover-upload-text">Tap to upload a cover image</span>
+            </div>
+            <button class="cover-upload-clear" id="coverImageClear" style="display:none">✕ Remove image</button>
+          </div>
+        </div>
+        <div class="form-group" id="colorPickerGroup">
+          <label>Cover Color <span class="label-hint">(used if no image)</span></label>
+          <div class="color-picker" id="colorPicker">
+            <div class="color-swatch selected" data-color="#6B8F71" style="background:#6B8F71"></div>
+            <div class="color-swatch" data-color="#9B6B9B" style="background:#9B6B9B"></div>
+            <div class="color-swatch" data-color="#6B7F9B" style="background:#6B7F9B"></div>
+            <div class="color-swatch" data-color="#C4895F" style="background:#C4895F"></div>
+            <div class="color-swatch" data-color="#8B6B5C" style="background:#8B6B5C"></div>
+            <div class="color-swatch" data-color="#4A7C9B" style="background:#4A7C9B"></div>
+            <div class="color-swatch" data-color="#B5724A" style="background:#B5724A"></div>
+            <div class="color-swatch" data-color="#5C7A5C" style="background:#5C7A5C"></div>
+            <div class="color-swatch" data-color="#7A5C7A" style="background:#7A5C7A"></div>
+            <div class="color-swatch" data-color="#2C4A6B" style="background:#2C4A6B"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <div class="status-picker" id="statusPicker">
+            <button class="status-opt selected" data-status="not_started">📚 Not Started</button>
+            <button class="status-opt" data-status="reading">📖 Reading</button>
+            <button class="status-opt" data-status="complete">✅ Complete</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="cancelAdd">Cancel</button>
+        <button class="btn-save" id="saveBook">Add to Shelf</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT BOOK MODAL -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Edit Book</h3>
+        <button class="modal-close" id="closeEditModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" id="editTitle" placeholder="Enter book title" />
+        </div>
+        <div class="form-group">
+          <label>Author</label>
+          <input type="text" id="editAuthor" placeholder="Author name" />
+        </div>
+        <div class="form-group">
+          <label>Cover Image</label>
+          <div class="cover-image-upload" id="editCoverImageUpload">
+            <input type="file" id="editCoverImageInput" accept="image/*" style="display:none" />
+            <div class="cover-upload-preview" id="editCoverUploadPreview">
+              <span class="cover-upload-icon">🖼️</span>
+              <span class="cover-upload-text">Tap to upload a cover image</span>
+            </div>
+            <button class="cover-upload-clear" id="editCoverImageClear" style="display:none">✕ Remove image</button>
+          </div>
+        </div>
+        <div class="form-group" id="editColorPickerGroup">
+          <label>Cover Color <span class="label-hint">(used if no image)</span></label>
+          <div class="color-picker" id="editColorPicker">
+            <div class="color-swatch selected" data-color="#6B8F71" style="background:#6B8F71"></div>
+            <div class="color-swatch" data-color="#9B6B9B" style="background:#9B6B9B"></div>
+            <div class="color-swatch" data-color="#6B7F9B" style="background:#6B7F9B"></div>
+            <div class="color-swatch" data-color="#C4895F" style="background:#C4895F"></div>
+            <div class="color-swatch" data-color="#8B6B5C" style="background:#8B6B5C"></div>
+            <div class="color-swatch" data-color="#4A7C9B" style="background:#4A7C9B"></div>
+            <div class="color-swatch" data-color="#B5724A" style="background:#B5724A"></div>
+            <div class="color-swatch" data-color="#5C7A5C" style="background:#5C7A5C"></div>
+            <div class="color-swatch" data-color="#7A5C7A" style="background:#7A5C7A"></div>
+            <div class="color-swatch" data-color="#2C4A6B" style="background:#2C4A6B"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <div class="status-picker" id="editStatusPicker">
+            <button class="status-opt" data-status="not_started">📚 Not Started</button>
+            <button class="status-opt" data-status="reading">📖 Reading</button>
+            <button class="status-opt" data-status="complete">✅ Complete</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-delete" id="deleteBook">Remove Book</button>
+        <button class="btn-save" id="updateBook">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

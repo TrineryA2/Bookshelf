@@ -1,0 +1,9 @@
+{
+  "name": "Readowl",
+  "short_name": "Readowl",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#E8E0D4",
+  "theme_color": "#C8A97E",
+  "orientation": "portrait"
+}
